@@ -1,0 +1,23 @@
+#!/bin/bash -eu
+
+setup() {
+	# "Give me a lever and a place to stand" -- Aristotle
+	cd /tmp
+	rm -rf pyscript
+	kill $(pgrep -f http.server) 2>/dev/null || true       # don't kill the messenger
+}
+
+teardown() {
+	# "Cleanliness is next to godliness" -- Anonymous
+	# TODO: give the user a way to run this when done demo-ing.
+	cd -
+	kill $(pgrep -f http.server)
+	rm -rf /tmp/pyscript
+}
+
+setup
+git clone https://github.com/jsh/pyscript      # get the hacked repo with all the demos
+cd pyscript/examples                           # which are in "examples"
+python3 -m http.server &                       # start an http server in that directory
+open http://localhost:8000                     # now make sure to click on Setup first
+echo "=== CLICK ON SETUP FIRST! ==="
